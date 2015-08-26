@@ -4,6 +4,8 @@
 
 from ff import GF256int
 from polynomial import Polynomial
+try: xrange #Python 2
+except NameError: xrange = range #Python 3
 
 """This module implements Reed-Solomon Encoding.
 It supports arbitrary configurations for n and k, the codeword length and

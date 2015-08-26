@@ -1,7 +1,9 @@
 # Copyright (c) 2010 Andrew Brown <brownan@cs.duke.edu, brownan@gmail.com>
 # See LICENSE.txt for license terms
 
-from StringIO import StringIO
+from __future__ import division
+try: from StringIO import StringIO #Python 2
+except ImportError: from io import StringIO #Python 3
 
 class Polynomial(object):
     """Completely general polynomial class.
@@ -50,14 +52,16 @@ class Polynomial(object):
             self.coefficients = tuple(c)
         elif sparse:
             # Polynomial(x32=...)
-            powers = sparse.keys()
+            powers = list(sparse.keys())
             powers.sort(reverse=1)
             # Not catching possible exceptions from the following line, let
             # them bubble up.
             highest = int(powers[0][1:])
             coefficients = [0] * (highest+1)
 
-            for power, coeff in sparse.iteritems():
+            try: iteritems = sparse.iteritems() #Python 2
+            except AttributeError: iteritems = sparse.items() #Python 3
+            for power, coeff in iteritems:
                 power = int(power[1:])
                 coefficients[highest - power] = coeff
 
